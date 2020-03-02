@@ -1,0 +1,30 @@
+---
+- hosts: all
+  tasks:
+       - name: ensure update-notifier is installed
+         apt: name=update-notifier-common state=present update_cache=yes
+         when: ansible_facts['distribution'] == "Ubuntu"
+       - name: ensure bikeshed is available for purging kernels
+         apt: name=bikeshed state=present
+         when: ansible_facts['distribution'] == "Ubuntu"
+       - name: if debian, create directory for apt-check to live in
+         file:
+           path: "{{ item }}"
+           state: directory
+           owner: root
+           group: root
+           mode: 0775
+         with_items:
+         - /usr/lib/update-notifier
+         when: ansible_facts['distribution'] == "Debian"
+       - name: if debian, copy local apt-check script there...
+         copy: src=/usr/lib/update-notifier/apt_check.py dest=/usr/lib/update-notifier/apt-check mode=0755
+         when: ansible_facts['distribution'] == "Debian"
+       - name: ensure aptitude is available
+         apt: name=aptitude state=present
+       - name: copy new config file
+         copy: src=files/userparameter_updates.conf dest=/etc/zabbix/zabbix_agentd.conf.d/userparameter_updates.conf  mode=0644
+       - name: restart agent
+         command: /etc/init.d/zabbix-agent restart
+#       - name: copy updateme script
+#       copy: src=files/updateme dest=/usr/local/sbin/updateme mode=0755

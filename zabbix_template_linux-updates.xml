@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2020-03-02T13:32:23Z</date>
+    <groups>
+        <group>
+            <name>Discovered hosts</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Linux Updates</template>
+            <name>linux-updates</name>
+            <description>20200209 &#13;
+Use apt-check from update-notifier-common to check how many (if any) packages need updating. Debian requires a file from Ubunto to achieve the same thing... ;)</description>
+            <groups>
+                <group>
+                    <name>Discovered hosts</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Reboot Required</name>
+                </application>
+                <application>
+                    <name>Updates Available</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Reboot Required</name>
+                    <key>reboot.required</key>
+                    <delay>1h</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>20200209 - Should hopefully show if a reboot of the machine is required</description>
+                    <applications>
+                        <application>
+                            <name>Reboot Required</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{str(*** System restart required ***)}=1</expression>
+                            <name>Reboot Required</name>
+                            <priority>INFO</priority>
+                            <description>20200209 - should trigger if system requires a reboot</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Standard Updates Available</name>
+                    <key>updates.normal</key>
+                    <delay>1h</delay>
+                    <description>20200209 - shows number of packages waiting for an update.</description>
+                    <applications>
+                        <application>
+                            <name>Updates Available</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;0</expression>
+                            <name>Updates Available</name>
+                            <priority>INFO</priority>
+                            <description>20200209 - should trigger if updates available</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <name>Security Updates Available</name>
+                    <key>updates.security</key>
+                    <delay>1h</delay>
+                    <description>20200209 - Shows number of security updates available.</description>
+                    <applications>
+                        <application>
+                            <name>Updates Available</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&gt;0</expression>
+                            <name>Security Updates Available</name>
+                            <priority>INFO</priority>
+                            <description>20200209 - Should trigger if security updates available</description>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+        </template>
+    </templates>
+</zabbix_export>

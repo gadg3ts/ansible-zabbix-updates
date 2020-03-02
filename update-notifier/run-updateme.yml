@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+       - name: run updateme script
+         command: /usr/local/sbin/updateme

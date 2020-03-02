@@ -1,0 +1,11 @@
+#!/bin/bash
+if [ "$USER" != "root" ]; then
+echo "run with sudo!"
+else
+aptitude update
+aptitude -y --disable-columns safe-upgrade
+aptitude -y dist-upgrade
+aptitude autoclean
+purge-old-kernels -y # requires 'bikeshed'
+fi
+
