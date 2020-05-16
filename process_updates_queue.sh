@@ -5,7 +5,7 @@ UPDATES_FILE=/tmp/updates_queue
 UPDATES_RUNNING=/tmp/running_update
 RECIPIENT=sean@gongbong.com
 NEXT_HOST=$(head --lines=1 $UPDATES_FILE)
-$OUTPUT=/tmp/$NEXT_HOST.out
+OUTPUT=/tmp/$NEXT_HOST.out
 if [ "$NEXT_HOST" ]; then
 	if [ $(grep "$NEXT_HOST" $UPDATES_RUNNING) ]; then
 		echo "This host is already running updates"
@@ -14,7 +14,8 @@ if [ "$NEXT_HOST" ]; then
 		# ssh root@autosec /root/ansible/zabbix/update-one.sh $NEXT_HOST | /usr/bin/mailx -s "$NEXT_HOST updated via zabbix scripts!" $RECIPIENT
 
 		ssh root@autosec /root/ansible/zabbix/update-one.sh $NEXT_HOST > $OUTPUT
-		if [ $( grep "FAILED" $OUTPUT ) ]; 
+		RESULT=$( grep "FAILED" $OUTPUT ) 
+		if [ "$RESULT" ];  then
 			cat $OUTPUT | /usr/bin/mailx -s "$NEXT_HOST FAILED update via zabbix scripts!" $RECIPIENT
 		else
 			cat $OUTPUT | /usr/bin/mailx -s "$NEXT_HOST updated OK via zabbix scripts!" $RECIPIENT
