@@ -3,7 +3,7 @@
 # 2020-05-15 updated to just notify on "FAILED!" - actually to start with we just want to know from the subject line...
 UPDATES_FILE=/tmp/updates_queue
 UPDATES_RUNNING=/tmp/running_update
-RECIPIENT=sean@gongbong.com
+RECIPIENT=me@example.com
 NEXT_HOST=$(head --lines=1 $UPDATES_FILE)
 OUTPUT=/tmp/$NEXT_HOST.out
 if [ "$NEXT_HOST" ]; then
